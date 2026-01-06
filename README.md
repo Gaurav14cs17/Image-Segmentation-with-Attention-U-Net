@@ -2,6 +2,15 @@
 
 A deep learning project for binary image segmentation with object counting. Built with PyTorch.
 
+### AttentionUNet Architecture
+
+<p align="center">
+  <img src="./images/model_diagram.svg" alt="AttentionUNet Architecture" width="100%">
+</p>
+
+
+
+
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-1.9+-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
@@ -209,12 +218,6 @@ python inference.py --image photo.jpg --checkpoint model.pth \
 | `attention_unet` | 6.5M | **Recommended.** CBAM attention + learnable downsampling |
 | `u2net_small` | 1.1M | Lightweight, uses MaxPool |
 | `u2net` | 44M | Full U²-Net |
-
-### AttentionUNet Architecture
-
-<p align="center">
-  <img src="./images/model_diagram.svg" alt="AttentionUNet Architecture" width="100%">
-</p>
 
 
 
