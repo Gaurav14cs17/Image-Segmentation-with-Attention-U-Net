@@ -1,8 +1,8 @@
-# Image Segmentation with Attention U-Net
-
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-1.9+-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+# Image Segmentation with Attention U-Net
 
 
 A deep learning project for binary image segmentation with object counting. Built with PyTorch.
