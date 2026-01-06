@@ -51,24 +51,7 @@ Training results showing Input + Prediction overlay | Prediction mask | Ground T
   <img src="./images/count_mask.png" alt="Mask" width="80%">
 </p>
 
-### Batch Counting Results
 
-```
-==================================================
-COUNTING RESULTS
-==================================================
-Image                                       Count
---------------------------------------------------
-Tests_track1__1038_1040_570.png                29
-Tests_track1__1332_765_79.png                  48
-Tests_track1__1472_2573_760.png                36
-Tests_track1__1538_1580_270.png                43
-Tests_track1__2176_1060_160.png                28
-...
---------------------------------------------------
-TOTAL (56 images)                            1800
-==================================================
-```
 
 ---
 
