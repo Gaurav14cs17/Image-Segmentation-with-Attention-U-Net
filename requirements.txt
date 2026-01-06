@@ -1,0 +1,15 @@
+# U²-Net Segmentation Model Requirements
+
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.24.0
+Pillow>=9.5.0
+
+# Training utilities
+tqdm>=4.65.0
+tensorboard>=2.13.0
+
+# Optional: for downloading pretrained weights
+requests>=2.31.0
+

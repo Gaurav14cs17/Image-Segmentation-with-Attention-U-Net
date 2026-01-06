@@ -1,0 +1,339 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 850" width="1400" height="850">
+  <defs>
+    <linearGradient id="encoderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="decoderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="attentionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bottleneckGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="downGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748B"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10B981"/>
+    </marker>
+    <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#F59E0B"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#0F172A"/>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="32" font-weight="bold">AttentionUNet Architecture</text>
+  <text x="700" y="70" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Pure Attention-based U-Net with Learnable Downsampling • No MaxPool</text>
+  
+  <!-- Legend - at bottom -->
+  <g transform="translate(80, 730)">
+    <rect x="0" y="0" width="500" height="70" rx="10" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+    <text x="250" y="22" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Legend</text>
+    
+    <rect x="20" y="38" width="20" height="20" rx="4" fill="url(#encoderGrad)"/>
+    <text x="48" y="53" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="11">Encoder</text>
+    
+    <rect x="120" y="38" width="20" height="20" rx="4" fill="url(#decoderGrad)"/>
+    <text x="148" y="53" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="11">Decoder</text>
+    
+    <rect x="220" y="38" width="20" height="20" rx="4" fill="url(#attentionGrad)"/>
+    <text x="248" y="53" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="11">Attention</text>
+    
+    <rect x="320" y="38" width="20" height="20" rx="4" fill="url(#downGrad)"/>
+    <text x="348" y="53" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="11">Downsample</text>
+    
+    <line x1="430" y1="48" x2="460" y2="48" stroke="#F59E0B" stroke-width="3" stroke-dasharray="6,3"/>
+    <text x="468" y="53" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="11">Skip</text>
+  </g>
+
+  <!-- ==================== ENCODER SIDE (LEFT) ==================== -->
+  
+  <!-- Input -->
+  <g transform="translate(80, 380)">
+    <rect x="0" y="0" width="90" height="110" rx="8" fill="#334155" stroke="#64748B" stroke-width="2" filter="url(#shadow)"/>
+    <text x="45" y="35" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Input</text>
+    <text x="45" y="55" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="12">RGB</text>
+    <text x="45" y="75" text-anchor="middle" fill="#64748B" font-family="Arial, sans-serif" font-size="11">3 × H × W</text>
+    <text x="45" y="98" text-anchor="middle" fill="#6366F1" font-family="Arial, sans-serif" font-size="10">320×320</text>
+  </g>
+  
+  <!-- Arrow: Input -> E1 -->
+  <line x1="170" y1="435" x2="200" y2="435" stroke="#64748B" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- E1 -->
+  <g transform="translate(210, 350)">
+    <rect x="0" y="0" width="100" height="170" rx="10" fill="url(#encoderGrad)" filter="url(#shadow)"/>
+    <text x="50" y="30" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Enc 1</text>
+    <text x="50" y="50" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="11">32 channels</text>
+    <line x1="10" y1="60" x2="90" y2="60" stroke="#A5B4FC" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="50" y="80" text-anchor="middle" fill="#E0E7FF" font-family="Arial, sans-serif" font-size="10">Conv 3×3</text>
+    <text x="50" y="95" text-anchor="middle" fill="#E0E7FF" font-family="Arial, sans-serif" font-size="10">BatchNorm</text>
+    <text x="50" y="110" text-anchor="middle" fill="#E0E7FF" font-family="Arial, sans-serif" font-size="10">ReLU</text>
+    <text x="50" y="130" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="11" font-weight="bold">+ CBAM</text>
+    <text x="50" y="155" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="10">H × W</text>
+  </g>
+  
+  <!-- Down 1 -->
+  <g transform="translate(320, 410)">
+    <rect x="0" y="0" width="60" height="50" rx="6" fill="url(#downGrad)" stroke="#818CF8" stroke-width="1"/>
+    <text x="30" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">↓ Down</text>
+    <text x="30" y="35" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="9">stride=2</text>
+    <text x="30" y="46" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="8">learnable</text>
+  </g>
+  
+  <!-- E2 -->
+  <g transform="translate(390, 370)">
+    <rect x="0" y="0" width="90" height="130" rx="10" fill="url(#encoderGrad)" filter="url(#shadow)"/>
+    <text x="45" y="25" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Enc 2</text>
+    <text x="45" y="45" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="11">64 ch</text>
+    <line x1="10" y1="55" x2="80" y2="55" stroke="#A5B4FC" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="45" y="75" text-anchor="middle" fill="#E0E7FF" font-family="Arial, sans-serif" font-size="10">Conv×2</text>
+    <text x="45" y="95" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="11" font-weight="bold">+ CBAM</text>
+    <text x="45" y="118" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="10">H/2 × W/2</text>
+  </g>
+  
+  <!-- Down 2 -->
+  <g transform="translate(490, 410)">
+    <rect x="0" y="0" width="60" height="50" rx="6" fill="url(#downGrad)" stroke="#818CF8" stroke-width="1"/>
+    <text x="30" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">↓ Down</text>
+    <text x="30" y="35" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="9">stride=2</text>
+  </g>
+  
+  <!-- E3 -->
+  <g transform="translate(560, 390)">
+    <rect x="0" y="0" width="80" height="100" rx="10" fill="url(#encoderGrad)" filter="url(#shadow)"/>
+    <text x="40" y="22" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="13" font-weight="bold">Enc 3</text>
+    <text x="40" y="40" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="10">128 ch</text>
+    <line x1="8" y1="50" x2="72" y2="50" stroke="#A5B4FC" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="40" y="68" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="10" font-weight="bold">+ CBAM</text>
+    <text x="40" y="88" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="9">H/4 × W/4</text>
+  </g>
+  
+  <!-- Down 3 -->
+  <g transform="translate(650, 415)">
+    <rect x="0" y="0" width="60" height="50" rx="6" fill="url(#downGrad)" stroke="#818CF8" stroke-width="1"/>
+    <text x="30" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">↓ Down</text>
+    <text x="30" y="35" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="9">stride=2</text>
+  </g>
+  
+  <!-- E4 -->
+  <g transform="translate(720, 405)">
+    <rect x="0" y="0" width="70" height="80" rx="10" fill="url(#encoderGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Enc 4</text>
+    <text x="35" y="38" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="10">256 ch</text>
+    <text x="35" y="55" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="9" font-weight="bold">+ CBAM</text>
+    <text x="35" y="72" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="8">H/8×W/8</text>
+  </g>
+  
+  <!-- Down 4 -->
+  <g transform="translate(800, 420)">
+    <rect x="0" y="0" width="60" height="50" rx="6" fill="url(#downGrad)" stroke="#818CF8" stroke-width="1"/>
+    <text x="30" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">↓ Down</text>
+    <text x="30" y="35" text-anchor="middle" fill="#C7D2FE" font-family="Arial, sans-serif" font-size="9">stride=2</text>
+  </g>
+  
+  <!-- ==================== BOTTLENECK (CENTER) ==================== -->
+  
+  <g transform="translate(870, 400)">
+    <rect x="0" y="0" width="100" height="100" rx="12" fill="url(#bottleneckGrad)" filter="url(#shadow)" stroke="#60A5FA" stroke-width="3"/>
+    <text x="50" y="28" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Bottleneck</text>
+    <text x="50" y="48" text-anchor="middle" fill="#BFDBFE" font-family="Arial, sans-serif" font-size="11">256 ch</text>
+    <text x="50" y="68" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="11" font-weight="bold">+ CBAM</text>
+    <text x="50" y="88" text-anchor="middle" fill="#93C5FD" font-family="Arial, sans-serif" font-size="9">H/16 × W/16</text>
+  </g>
+  
+  <!-- ==================== DECODER SIDE (RIGHT) ==================== -->
+  
+  <!-- Up arrow from bottleneck to D4 -->
+  <path d="M 970 450 Q 1000 450 1000 420 L 1000 405" stroke="#10B981" stroke-width="2" fill="none"/>
+  <text x="1010" y="430" fill="#10B981" font-family="Arial, sans-serif" font-size="9">↑ Bilinear</text>
+  
+  <!-- D4 -->
+  <g transform="translate(980, 325)">
+    <rect x="0" y="0" width="70" height="80" rx="10" fill="url(#decoderGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Dec 4</text>
+    <text x="35" y="38" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">256 ch</text>
+    <text x="35" y="55" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="9" font-weight="bold">+ CBAM</text>
+    <text x="35" y="72" text-anchor="middle" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="8">H/8×W/8</text>
+  </g>
+  
+  <!-- Up to D3 -->
+  <path d="M 1050 365 L 1070 365" stroke="#10B981" stroke-width="2" fill="none"/>
+  <text x="1055" y="355" fill="#10B981" font-family="Arial, sans-serif" font-size="8">↑</text>
+  
+  <!-- D3 -->
+  <g transform="translate(1070, 310)">
+    <rect x="0" y="0" width="80" height="100" rx="10" fill="url(#decoderGrad)" filter="url(#shadow)"/>
+    <text x="40" y="22" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="13" font-weight="bold">Dec 3</text>
+    <text x="40" y="40" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">128 ch</text>
+    <line x1="8" y1="50" x2="72" y2="50" stroke="#6EE7B7" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="40" y="68" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="10" font-weight="bold">+ CBAM</text>
+    <text x="40" y="88" text-anchor="middle" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="9">H/4 × W/4</text>
+  </g>
+  
+  <!-- Up to D2 -->
+  <path d="M 1150 360 L 1170 360" stroke="#10B981" stroke-width="2" fill="none"/>
+  <text x="1155" y="350" fill="#10B981" font-family="Arial, sans-serif" font-size="8">↑</text>
+  
+  <!-- D2 -->
+  <g transform="translate(1170, 290)">
+    <rect x="0" y="0" width="90" height="130" rx="10" fill="url(#decoderGrad)" filter="url(#shadow)"/>
+    <text x="45" y="25" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Dec 2</text>
+    <text x="45" y="45" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="11">64 ch</text>
+    <line x1="10" y1="55" x2="80" y2="55" stroke="#6EE7B7" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="45" y="75" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">Conv×2</text>
+    <text x="45" y="95" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="11" font-weight="bold">+ CBAM</text>
+    <text x="45" y="118" text-anchor="middle" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="10">H/2 × W/2</text>
+  </g>
+  
+  <!-- Up to D1 -->
+  <path d="M 1260 355 L 1280 355" stroke="#10B981" stroke-width="2" fill="none"/>
+  <text x="1265" y="345" fill="#10B981" font-family="Arial, sans-serif" font-size="8">↑</text>
+  
+  <!-- D1 -->
+  <g transform="translate(1280, 270)">
+    <rect x="0" y="0" width="100" height="170" rx="10" fill="url(#decoderGrad)" filter="url(#shadow)"/>
+    <text x="50" y="30" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Dec 1</text>
+    <text x="50" y="50" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="11">32 channels</text>
+    <line x1="10" y1="60" x2="90" y2="60" stroke="#6EE7B7" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="50" y="80" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">Conv 3×3</text>
+    <text x="50" y="95" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">BatchNorm</text>
+    <text x="50" y="110" text-anchor="middle" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="10">ReLU</text>
+    <text x="50" y="130" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="11" font-weight="bold">+ CBAM</text>
+    <text x="50" y="155" text-anchor="middle" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="10">H × W</text>
+  </g>
+  
+  <!-- Output -->
+  <g transform="translate(1280, 460)">
+    <rect x="0" y="0" width="100" height="100" rx="8" fill="#334155" stroke="#10B981" stroke-width="3" filter="url(#shadow)"/>
+    <text x="50" y="30" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Output</text>
+    <text x="50" y="50" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="11">1 × H × W</text>
+    <text x="50" y="70" text-anchor="middle" fill="#64748B" font-family="Arial, sans-serif" font-size="10">Sigmoid</text>
+    <text x="50" y="90" text-anchor="middle" fill="#10B981" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Binary Mask</text>
+  </g>
+  
+  <!-- Arrow: D1 -> Output -->
+  <line x1="1330" y1="440" x2="1330" y2="460" stroke="#10B981" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+  
+  <!-- ==================== SKIP CONNECTIONS ==================== -->
+  
+  <!-- Skip 1: E1 -> Attention -> D1 -->
+  <path d="M 260 350 L 260 150 L 1330 150 L 1330 270" stroke="#F59E0B" stroke-width="3" fill="none" stroke-dasharray="10,5" marker-end="url(#arrowhead-orange)"/>
+  <g transform="translate(770, 135)">
+    <rect x="0" y="0" width="70" height="30" rx="6" fill="url(#attentionGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">CBAM</text>
+  </g>
+  <text x="500" y="145" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">Skip 1 (32ch)</text>
+  
+  <!-- Skip 2: E2 -> Attention -> D2 -->
+  <path d="M 435 370 L 435 200 L 1215 200 L 1215 290" stroke="#F59E0B" stroke-width="3" fill="none" stroke-dasharray="10,5" marker-end="url(#arrowhead-orange)"/>
+  <g transform="translate(800, 185)">
+    <rect x="0" y="0" width="70" height="30" rx="6" fill="url(#attentionGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">CBAM</text>
+  </g>
+  <text x="600" y="195" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">Skip 2 (64ch)</text>
+  
+  <!-- Skip 3: E3 -> Attention -> D3 -->
+  <path d="M 600 390 L 600 250 L 1110 250 L 1110 310" stroke="#F59E0B" stroke-width="3" fill="none" stroke-dasharray="10,5" marker-end="url(#arrowhead-orange)"/>
+  <g transform="translate(830, 235)">
+    <rect x="0" y="0" width="70" height="30" rx="6" fill="url(#attentionGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">CBAM</text>
+  </g>
+  <text x="700" y="245" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">Skip 3 (128ch)</text>
+  
+  <!-- Skip 4: E4 -> Attention -> D4 -->
+  <path d="M 755 405 L 755 300 L 1015 300 L 1015 325" stroke="#F59E0B" stroke-width="3" fill="none" stroke-dasharray="10,5" marker-end="url(#arrowhead-orange)"/>
+  <g transform="translate(860, 285)">
+    <rect x="0" y="0" width="70" height="30" rx="6" fill="url(#attentionGrad)" filter="url(#shadow)"/>
+    <text x="35" y="20" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">CBAM</text>
+  </g>
+  <text x="800" y="295" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">Skip 4 (256ch)</text>
+  
+  <!-- ==================== BOTTOM INFO BOXES ==================== -->
+  
+  <!-- CBAM Detail -->
+  <g transform="translate(80, 580)">
+    <rect x="0" y="0" width="320" height="130" rx="10" fill="#1E293B" stroke="#F59E0B" stroke-width="2"/>
+    <text x="160" y="28" text-anchor="middle" fill="#FCD34D" font-family="Arial, sans-serif" font-size="16" font-weight="bold">CBAM Attention Module</text>
+    
+    <g transform="translate(20, 45)">
+      <rect x="0" y="0" width="120" height="65" rx="6" fill="#374151"/>
+      <text x="60" y="20" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Channel Att.</text>
+      <text x="60" y="38" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="9">AvgPool + MaxPool</text>
+      <text x="60" y="52" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="9">→ MLP → σ</text>
+    </g>
+    
+    <text x="160" y="85" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="20" font-weight="bold">×</text>
+    
+    <g transform="translate(180, 45)">
+      <rect x="0" y="0" width="120" height="65" rx="6" fill="#374151"/>
+      <text x="60" y="20" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Spatial Att.</text>
+      <text x="60" y="38" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="9">AvgPool + MaxPool</text>
+      <text x="60" y="52" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="9">→ Conv7×7 → σ</text>
+    </g>
+  </g>
+  
+  <!-- Learnable Downsample -->
+  <g transform="translate(420, 580)">
+    <rect x="0" y="0" width="280" height="130" rx="10" fill="#1E293B" stroke="#6366F1" stroke-width="2"/>
+    <text x="140" y="28" text-anchor="middle" fill="#A5B4FC" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Learnable Downsampling</text>
+    <text x="140" y="55" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="12">Conv2d(stride=2) + BN + ReLU</text>
+    <text x="140" y="80" text-anchor="middle" fill="#6EE7B7" font-family="Arial, sans-serif" font-size="12">✓ Trainable (not fixed like MaxPool)</text>
+    <text x="140" y="100" text-anchor="middle" fill="#6EE7B7" font-family="Arial, sans-serif" font-size="12">✓ Preserves spatial information</text>
+    <text x="140" y="120" text-anchor="middle" fill="#6EE7B7" font-family="Arial, sans-serif" font-size="12">✓ Better gradient flow</text>
+  </g>
+  
+  <!-- Model Stats -->
+  <g transform="translate(720, 580)">
+    <rect x="0" y="0" width="200" height="130" rx="10" fill="#1E293B" stroke="#10B981" stroke-width="2"/>
+    <text x="100" y="28" text-anchor="middle" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Model Stats</text>
+    <text x="100" y="55" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="13">Parameters: 6.5M</text>
+    <text x="100" y="78" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="13">Input: 3 × 320 × 320</text>
+    <text x="100" y="101" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="13">Output: 1 × 320 × 320</text>
+    <text x="100" y="122" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="11">Binary Segmentation</text>
+  </g>
+  
+  <!-- Channel Flow -->
+  <g transform="translate(940, 580)">
+    <rect x="0" y="0" width="280" height="130" rx="10" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+    <text x="140" y="28" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Channel Flow</text>
+    <text x="140" y="55" text-anchor="middle" fill="#818CF8" font-family="Arial, sans-serif" font-size="12">Encoder: 3→32→64→128→256→256</text>
+    <text x="140" y="78" text-anchor="middle" fill="#34D399" font-family="Arial, sans-serif" font-size="12">Decoder: 256→256→128→64→32→1</text>
+    <line x1="20" y1="92" x2="260" y2="92" stroke="#475569" stroke-width="1"/>
+    <text x="140" y="110" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">Skip connections concatenate</text>
+    <text x="140" y="125" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="11">encoder features to decoder</text>
+  </g>
+  
+  <!-- Multi-scale fusion note -->
+  <g transform="translate(1240, 580)">
+    <rect x="0" y="0" width="140" height="130" rx="10" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+    <text x="70" y="28" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Fusion</text>
+    <text x="70" y="55" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="10">Side outputs</text>
+    <text x="70" y="70" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="10">from each</text>
+    <text x="70" y="85" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="10">decoder level</text>
+    <line x1="20" y1="95" x2="120" y2="95" stroke="#475569" stroke-width="1"/>
+    <text x="70" y="112" text-anchor="middle" fill="#10B981" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Weighted</text>
+    <text x="70" y="125" text-anchor="middle" fill="#10B981" font-family="Arial, sans-serif" font-size="10" font-weight="bold">combination</text>
+  </g>
+  
+  <!-- Encoder/Decoder Labels -->
+  <text x="400" y="545" text-anchor="middle" fill="#818CF8" font-family="Arial, sans-serif" font-size="18" font-weight="bold">← ENCODER</text>
+  <text x="1150" y="545" text-anchor="middle" fill="#34D399" font-family="Arial, sans-serif" font-size="18" font-weight="bold">DECODER →</text>
+  
+</svg>
